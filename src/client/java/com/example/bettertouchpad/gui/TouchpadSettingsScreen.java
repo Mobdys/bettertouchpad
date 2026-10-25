@@ -44,6 +44,20 @@ public class TouchpadSettingsScreen extends OptionsSubScreen {
         ).build();
         this.list.addSmall(singleClickButton, singleClickPicker);
 
+        // One-Finger Swipe row (1 Parmakla Kaydırma)
+        CycleButton<TouchpadAction> oneFingerSwipeButton = CycleButton.builder(TouchpadAction::getDisplayName, config.getOneFingerSwipeAction())
+            .withValues(TouchpadAction.values())
+            .withTooltip(action -> Tooltip.create(Component.translatable("bettertouchpad.gesture.one_finger_swipe.tooltip", action.getDisplayName(), action.getDescription())))
+            .create(Component.translatable("bettertouchpad.gesture.one_finger_swipe"), (button, value) -> {
+                config.setOneFingerSwipeAction(value);
+                config.save();
+            });
+        Button oneFingerSwipePicker = Button.builder(
+            Component.translatable("bettertouchpad.button.action_picker"),
+            button -> this.minecraft.gui.setScreen(new ActionPickerScreen(this, this.options, TouchpadGesture.ONE_FINGER_SWIPE))
+        ).build();
+        this.list.addSmall(oneFingerSwipeButton, oneFingerSwipePicker);
+
         // Two-Finger Click row
         CycleButton<TouchpadAction> twoFingerButton = CycleButton.builder(TouchpadAction::getDisplayName, config.getTwoFingerClickAction())
             .withValues(TouchpadAction.values())
@@ -72,7 +86,7 @@ public class TouchpadSettingsScreen extends OptionsSubScreen {
         ).build();
         this.list.addSmall(threeFingerButton, threeFingerPicker);
 
-        // Three-Finger Swipe row (Yeni)
+        // Three-Finger Swipe row
         CycleButton<TouchpadAction> threeFingerSwipeButton = CycleButton.builder(TouchpadAction::getDisplayName, config.getThreeFingerSwipeAction())
             .withValues(TouchpadAction.values())
             .withTooltip(action -> Tooltip.create(Component.translatable("bettertouchpad.gesture.three_finger_swipe.tooltip", action.getDisplayName(), action.getDescription())))
@@ -86,7 +100,7 @@ public class TouchpadSettingsScreen extends OptionsSubScreen {
         ).build();
         this.list.addSmall(threeFingerSwipeButton, threeFingerSwipePicker);
 
-        // Four-Finger Tap row (Yeni)
+        // Four-Finger Tap row
         CycleButton<TouchpadAction> fourFingerTapButton = CycleButton.builder(TouchpadAction::getDisplayName, config.getFourFingerTapAction())
             .withValues(TouchpadAction.values())
             .withTooltip(action -> Tooltip.create(Component.translatable("bettertouchpad.gesture.four_finger_tap.tooltip", action.getDisplayName(), action.getDescription())))
@@ -100,7 +114,7 @@ public class TouchpadSettingsScreen extends OptionsSubScreen {
         ).build();
         this.list.addSmall(fourFingerTapButton, fourFingerTapPicker);
 
-        // Four-Finger Swipe row (Yeni - Windows masaüstü değiştirme yerine)
+        // Four-Finger Swipe row (Windows masaüstü değiştirme yerine)
         CycleButton<TouchpadAction> fourFingerSwipeButton = CycleButton.builder(TouchpadAction::getDisplayName, config.getFourFingerSwipeAction())
             .withValues(TouchpadAction.values())
             .withTooltip(action -> Tooltip.create(Component.translatable("bettertouchpad.gesture.four_finger_swipe.tooltip", action.getDisplayName(), action.getDescription())))

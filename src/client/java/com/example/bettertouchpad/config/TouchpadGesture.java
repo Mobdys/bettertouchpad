@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 
 public enum TouchpadGesture {
     SINGLE_CLICK("single_click"),
+    ONE_FINGER_SWIPE("one_finger_swipe"),
     TWO_FINGER_CLICK("two_finger_click"),
     THREE_FINGER_CLICK("three_finger_click"),
     THREE_FINGER_SWIPE("three_finger_swipe"),

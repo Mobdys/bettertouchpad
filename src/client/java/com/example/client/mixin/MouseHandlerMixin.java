@@ -36,11 +36,11 @@ public class MouseHandlerMixin {
 
     @ModifyVariable(method = "onMove", at = @At("HEAD"), ordinal = 2, argsOnly = true)
     private double modifyXRel(double xrel) {
-        return TouchpadHandler.modifyLookDelta(xrel);
+        return TouchpadHandler.modifyLookX(xrel);
     }
 
     @ModifyVariable(method = "onMove", at = @At("HEAD"), ordinal = 3, argsOnly = true)
     private double modifyYRel(double yrel) {
-        return TouchpadHandler.modifyLookDelta(yrel);
+        return TouchpadHandler.modifyLookY(yrel);
     }
 }

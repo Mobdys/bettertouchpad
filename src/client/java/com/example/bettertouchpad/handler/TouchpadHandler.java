@@ -15,6 +15,12 @@ public class TouchpadHandler {
     private static boolean lastClickWasDouble = false;
     private static boolean zoomActive = false;
 
+    // State for 1-finger swipe look and gestures
+    private static double smoothLookX = 0.0;
+    private static double smoothLookY = 0.0;
+    private static double swipeXAccumulator = 0.0;
+    private static double swipeYAccumulator = 0.0;
+
     public static boolean handleButtonEvent(long handle, MouseButtonInfo rawButtonInfo, int action) {
         TouchpadConfig config = TouchpadConfig.getInstance();
         if (!config.isTouchpadMode()) {
@@ -114,6 +120,91 @@ public class TouchpadHandler {
         } else {
             executeInstantGameAction(client, action);
         }
+    }
+
+    public static double modifyLookX(double xrel) {
+        TouchpadConfig config = TouchpadConfig.getInstance();
+        if (!config.isTouchpadMode()) return xrel;
+
+        TouchpadAction action = config.getOneFingerSwipeAction();
+        if (action == TouchpadAction.NONE) {
+            return 0.0;
+        }
+
+        if (action == TouchpadAction.HOTBAR_CYCLE) {
+            swipeXAccumulator += xrel;
+            if (swipeXAccumulator >= 35.0) {
+                swipeXAccumulator = 0.0;
+                Minecraft client = Minecraft.getInstance();
+                if (client.player != null) {
+                    int slot = (client.player.getInventory().getSelectedSlot() + 1) % 9;
+                    client.player.getInventory().setSelectedSlot(slot);
+                }
+            } else if (swipeXAccumulator <= -35.0) {
+                swipeXAccumulator = 0.0;
+                Minecraft client = Minecraft.getInstance();
+                if (client.player != null) {
+                    int slot = client.player.getInventory().getSelectedSlot() - 1;
+                    if (slot < 0) slot = 8;
+                    client.player.getInventory().setSelectedSlot(slot);
+                }
+            }
+            return 0.0;
+        }
+
+        if (action != TouchpadAction.LOOK_NORMAL && action != TouchpadAction.LOOK_SMOOTH) {
+            swipeXAccumulator += xrel;
+            if (Math.abs(swipeXAccumulator) >= 60.0) {
+                swipeXAccumulator = 0.0;
+                Minecraft client = Minecraft.getInstance();
+                executeInstantGameAction(client, action);
+            }
+            return 0.0;
+        }
+
+        double sens = config.getTouchpadSensitivity();
+        double delta = xrel * sens;
+
+        if (action == TouchpadAction.LOOK_SMOOTH || config.isSmoothLook()) {
+            smoothLookX = smoothLookX * 0.65 + delta * 0.35;
+            return smoothLookX;
+        }
+
+        return delta;
+    }
+
+    public static double modifyLookY(double yrel) {
+        TouchpadConfig config = TouchpadConfig.getInstance();
+        if (!config.isTouchpadMode()) return yrel;
+
+        TouchpadAction action = config.getOneFingerSwipeAction();
+        if (action == TouchpadAction.NONE || action == TouchpadAction.HOTBAR_CYCLE) {
+            return 0.0;
+        }
+
+        if (action != TouchpadAction.LOOK_NORMAL && action != TouchpadAction.LOOK_SMOOTH) {
+            swipeYAccumulator += yrel;
+            if (Math.abs(swipeYAccumulator) >= 60.0) {
+                swipeYAccumulator = 0.0;
+                Minecraft client = Minecraft.getInstance();
+                executeInstantGameAction(client, action);
+            }
+            return 0.0;
+        }
+
+        double sens = config.getTouchpadSensitivity();
+        double delta = yrel * sens;
+
+        if (action == TouchpadAction.LOOK_SMOOTH || config.isSmoothLook()) {
+            smoothLookY = smoothLookY * 0.65 + delta * 0.35;
+            return smoothLookY;
+        }
+
+        return delta;
+    }
+
+    public static double modifyLookDelta(double delta) {
+        return modifyLookX(delta);
     }
 
     private static void executeInstantGameAction(Minecraft client, TouchpadAction action) {
@@ -247,15 +338,6 @@ public class TouchpadHandler {
             factor = -factor;
         }
         return yoffset * factor;
-    }
-
-    public static double modifyLookDelta(double delta) {
-        TouchpadConfig config = TouchpadConfig.getInstance();
-        if (!config.isTouchpadMode()) return delta;
-
-        double sens = config.getTouchpadSensitivity();
-        if (sens == 1.0) return delta;
-        return delta * sens;
     }
 
     public static boolean isZoomActive() {

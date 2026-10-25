@@ -25,6 +25,7 @@ public class TouchpadConfig {
     private double scrollSensitivity = 1.0;
 
     private TouchpadAction singleClickAction = TouchpadAction.LEFT_CLICK;
+    private TouchpadAction oneFingerSwipeAction = TouchpadAction.LOOK_NORMAL;
     private TouchpadAction twoFingerClickAction = TouchpadAction.RIGHT_CLICK;
     private TouchpadAction threeFingerClickAction = TouchpadAction.MIDDLE_CLICK;
     private TouchpadAction threeFingerSwipeAction = TouchpadAction.HOTBAR_NEXT;
@@ -59,6 +60,7 @@ public class TouchpadConfig {
                 this.touchpadSensitivity = Math.clamp(loaded.touchpadSensitivity, 0.2, 2.0);
                 this.scrollSensitivity = Math.clamp(loaded.scrollSensitivity, 0.2, 2.0);
                 if (loaded.singleClickAction != null) this.singleClickAction = loaded.singleClickAction;
+                if (loaded.oneFingerSwipeAction != null) this.oneFingerSwipeAction = loaded.oneFingerSwipeAction;
                 if (loaded.twoFingerClickAction != null) this.twoFingerClickAction = loaded.twoFingerClickAction;
                 if (loaded.threeFingerClickAction != null) this.threeFingerClickAction = loaded.threeFingerClickAction;
                 if (loaded.threeFingerSwipeAction != null) this.threeFingerSwipeAction = loaded.threeFingerSwipeAction;
@@ -96,6 +98,7 @@ public class TouchpadConfig {
         this.touchpadSensitivity = 1.0;
         this.scrollSensitivity = 1.0;
         this.singleClickAction = TouchpadAction.LEFT_CLICK;
+        this.oneFingerSwipeAction = TouchpadAction.LOOK_NORMAL;
         this.twoFingerClickAction = TouchpadAction.RIGHT_CLICK;
         this.threeFingerClickAction = TouchpadAction.MIDDLE_CLICK;
         this.threeFingerSwipeAction = TouchpadAction.HOTBAR_NEXT;
@@ -109,6 +112,7 @@ public class TouchpadConfig {
     public TouchpadAction getActionForGesture(TouchpadGesture gesture) {
         return switch (gesture) {
             case SINGLE_CLICK -> singleClickAction;
+            case ONE_FINGER_SWIPE -> oneFingerSwipeAction;
             case TWO_FINGER_CLICK -> twoFingerClickAction;
             case THREE_FINGER_CLICK -> threeFingerClickAction;
             case THREE_FINGER_SWIPE -> threeFingerSwipeAction;
@@ -121,6 +125,7 @@ public class TouchpadConfig {
     public void setActionForGesture(TouchpadGesture gesture, TouchpadAction action) {
         switch (gesture) {
             case SINGLE_CLICK -> singleClickAction = action;
+            case ONE_FINGER_SWIPE -> oneFingerSwipeAction = action;
             case TWO_FINGER_CLICK -> twoFingerClickAction = action;
             case THREE_FINGER_CLICK -> threeFingerClickAction = action;
             case THREE_FINGER_SWIPE -> threeFingerSwipeAction = action;
@@ -171,6 +176,9 @@ public class TouchpadConfig {
 
     public TouchpadAction getSingleClickAction() { return singleClickAction; }
     public void setSingleClickAction(TouchpadAction singleClickAction) { this.singleClickAction = singleClickAction; }
+
+    public TouchpadAction getOneFingerSwipeAction() { return oneFingerSwipeAction; }
+    public void setOneFingerSwipeAction(TouchpadAction oneFingerSwipeAction) { this.oneFingerSwipeAction = oneFingerSwipeAction; }
 
     public TouchpadAction getTwoFingerClickAction() { return twoFingerClickAction; }
     public void setTwoFingerClickAction(TouchpadAction twoFingerClickAction) { this.twoFingerClickAction = twoFingerClickAction; }

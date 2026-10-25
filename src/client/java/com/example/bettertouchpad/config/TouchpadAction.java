@@ -17,6 +17,9 @@ public enum TouchpadAction {
     HOTBAR_NEXT("hotbar_next", -7, false),
     HOTBAR_PREV("hotbar_prev", -8, false),
     ZOOM("zoom", -9, false),
+    LOOK_NORMAL("look_normal", 0, false),
+    LOOK_SMOOTH("look_smooth", 0, false),
+    HOTBAR_CYCLE("hotbar_cycle", 0, false),
     NONE("none", 0, false);
 
     private final String id;
